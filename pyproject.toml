@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "code-evidence"
+version = "0.1.0"
+description = "Local check evidence and compact failure reports for coding agents."
+requires-python = ">=3.12"
+readme = "README.md"
+license = "MIT"
+authors = [{name = "yarakrot"}]
+dependencies = []
+
+[project.optional-dependencies]
+mcp = ["mcp==2.2.0"]
+dev = ["ruff==0.16.9"]
+
+[project.scripts]
+code-evidence = "code_evidence.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

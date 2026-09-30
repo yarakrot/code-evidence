@@ -1,0 +1,13 @@
+schema_version = 1
+
+[checks.tests]
+argv = ["{python}", "-m", "unittest", "discover", "-s", "tests", "-v"]
+timeout_seconds = 60
+
+[checks.lint]
+argv = ["{python}", "-m", "ruff", "check", "."]
+timeout_seconds = 60
+
+[checks.format]
+argv = ["{python}", "-m", "ruff", "format", "--check", "."]
+timeout_seconds = 60
