@@ -35,6 +35,7 @@ class MCPIntegrationTests(unittest.TestCase):
                         self.assertEqual(
                             {t.name for t in tools.tools},
                             {
+                                "build_context",
                                 "inspect_change",
                                 "run_checks",
                                 "get_run_summary",
@@ -48,6 +49,8 @@ class MCPIntegrationTests(unittest.TestCase):
                         self.assertFalse(result.is_error)
                         data = result.structured_content or json.loads(result.content[0].text)
                         self.assertEqual(data["execution_enabled"], enabled)
+                        context = await client.call_tool("build_context", {"task": "smoke"})
+                        self.assertFalse(context.is_error)
                         result = await client.call_tool("run_checks", {"checks": ["smoke"]})
                         self.assertEqual(bool(result.is_error), not enabled)
                         if enabled:

@@ -12,6 +12,9 @@ def main() -> int:
     parser.add_argument("--project", type=Path, default=Path.cwd())
     subs = parser.add_subparsers(dest="command", required=True)
     subs.add_parser("inspect")
+    context = subs.add_parser("context")
+    context.add_argument("task")
+    context.add_argument("--budget-bytes", type=int, default=12_000)
     run = subs.add_parser("run")
     run.add_argument("checks", nargs="+")
     run.add_argument("--execute", action="store_true", help="Allow trusted-host execution")
@@ -38,13 +41,15 @@ def main() -> int:
             return 0
         if args.command == "inspect":
             result = service.inspect_change()
+        elif args.command == "context":
+            result = service.build_context(args.task, args.budget_bytes)
         elif args.command == "run":
             result = service.run_checks(args.checks)
         elif args.command == "summary":
             result = service.get_run_summary(args.run_id, args.compare_to)
         else:
             result = service.read_evidence(args.run_id, args.check, args.start_line, args.max_lines)
-        print(json.dumps(result, ensure_ascii=True, indent=2))
+        print(json.dumps(result, ensure_ascii=True, separators=(",", ":")))
         if args.command == "run" and any(r["status"] != "passed" for r in result["results"]):
             return 1
         return 0

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "code-evidence"
-version = "0.1.0"
+version = "0.2.0"
 description = "Local check evidence and compact failure reports for coding agents."
 requires-python = ">=3.12"
 readme = "README.md"

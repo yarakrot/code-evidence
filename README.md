@@ -2,9 +2,11 @@
 
 **Give coding agents compact failure reports and evidence tied to the code they checked.**
 
-Code Evidence combines Failure Lens and Proof of Change in a local Python core, CLI, and STDIO MCP server. It needs no LLM or paid API. Context selection and sandbox execution are future extensions, not shipped features.
+Code Evidence combines Failure Lens and Proof of Change in a local Python core, CLI, and STDIO MCP server. It needs no LLM or paid API. Python context selection is available; sandbox execution remains a future extension.
 
 ## What Works Today
+
+- Select Python symbols and heuristic callers/callees for a task, with relative paths, line spans, file hashes, inclusion reasons, and a serialized JSON byte budget.
 
 - Execute explicitly configured check names, with no arbitrary command argument exposed through MCP.
 - Store run history and redacted logs in local SQLite, retaining the latest 50 runs.
@@ -49,6 +51,16 @@ code-evidence --project . evidence RUN_ID tests --start-line 1 --max-lines 40
 
 Output is JSON. `run_id` comes from the returned receipt. Do not copy the placeholder IDs literally.
 
+## Context Budget
+
+```powershell
+code-evidence --project . context "get_run_summary freshness" --budget-bytes 12000
+```
+
+Selection uses Python AST and lexical keyword matching, not embeddings or semantic understanding. Include symbol names or paths when describing a task in another language. Call-name links are heuristic and may be ambiguous. Every request rereads included source; no stale persistent index is reused. Overlapping ranges are avoided, oversized symbols can be omitted, and the report exposes coverage and omitted matches.
+
+The budget covers the compact ASCII-escaped JSON object, including metadata, rather than an estimated token count. MCP transport wrappers and client rendering can add overhead. Maximum budget is 60,000 bytes; indexing is limited to 300 Python files, 1 MB per parsed file, and 2500 symbols within the source inventory limits. Known secrets are redacted from fragments, but unrecognized private content may remain.
+
 ## Configure Another Project
 
 Create `code-evidence.toml` in the trusted project's root:
@@ -71,6 +83,7 @@ timeout_seconds = 60
 
 | Tool | Behavior |
 | --- | --- |
+| `build_context` | Select bounded redacted Python fragments for a task |
 | `inspect_change` | Show configured checks and bounded changes since the last run |
 | `run_checks` | Run selected configured check names if enabled at startup |
 | `get_run_summary` | Read diagnostics, freshness, and optional comparison |
@@ -121,7 +134,7 @@ CI tests Windows/Linux on Python 3.12 and 3.13, including a real STDIO MCP disco
 
 ## Next Steps
 
-See [architecture](docs/ARCHITECTURE.md), [security boundaries](docs/SECURITY.md), and [roadmap](docs/ROADMAP.md). Planned: AST-based Context Budget, richer diagnostic adapters, README Reality integration, isolated execution, and measured agent benchmarks. No token-saving percentage is claimed by this release.
+See [architecture](docs/ARCHITECTURE.md), [security boundaries](docs/SECURITY.md), and [roadmap](docs/ROADMAP.md). Planned: richer context selection, diagnostic adapters, README Reality integration, isolated execution, and measured agent benchmarks. No token-saving percentage is claimed by this release.
 
 ## License
 

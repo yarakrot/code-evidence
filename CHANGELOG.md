@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.0 — 2026-10-01
+
+- Added read-only Context Budget through CLI and MCP.
+- Python AST fragments include evidence locations, file hashes, and heuristic inclusion reasons.
+- Bounded compact JSON includes metadata; coverage and omissions remain explicit.
+- Source is reread on each request; known secrets are redacted before output.
+- Added seven context regressions and extended real MCP protocol coverage.
+
 ## 0.1.0 — 2026-09-30
 
 - Local CLI and STDIO MCP with four project-bound tools.

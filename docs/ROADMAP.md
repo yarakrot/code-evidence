@@ -4,9 +4,9 @@
 
 Local core, check-name policy, explicit host execution, SQLite receipts, bounded redacted logs, diagnostic extraction, attempt comparison, source/environment freshness, CLI, STDIO MCP, and regression tests.
 
-## Next: Context Budget
+## Shipped: Initial Python Context Budget
 
-Start with Python AST symbols, imports/call sites, explicit file references, and changed-file selection. Return paths, line spans, reasons for inclusion, content hashes, omissions, and a size budget. Do not call a lexical selection semantic understanding. Gate: relevant-code fixtures, stale-index tests, and bounded responses.
+Python AST symbols, lexical ranking, heuristic caller/callee names, line spans, inclusion reasons, file hashes, coverage, and a serialized JSON byte budget are implemented. Requests reread source and never execute it. Regression tests cover selection, edits, Unicode budget accounting, redaction, and overlap. Next: precise import resolution, import context, explicit symbol lookup, and measured retrieval quality.
 
 ## Diagnostic adapters and honest benchmarks
 

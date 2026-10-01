@@ -13,6 +13,14 @@ def create_server(service: EvidenceService):
     server = MCPServer("Code Evidence")
 
     @server.tool(annotations=ToolAnnotations(read_only_hint=True, open_world_hint=False))
+    def build_context(task: str, budget_bytes: int = 12_000) -> dict:
+        """Select bounded redacted Python fragments with line evidence and heuristic reasons."""
+        try:
+            return service.build_context(task, budget_bytes)
+        except ValueError as error:
+            raise ToolError(str(error)) from error
+
+    @server.tool(annotations=ToolAnnotations(read_only_hint=True, open_world_hint=False))
     def inspect_change() -> dict:
         """Read source changes and configured checks; never runs project commands."""
         return service.inspect_change()

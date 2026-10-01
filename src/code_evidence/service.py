@@ -11,6 +11,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from . import __version__
+from .context import build_context
 from .diagnostics import summarize
 from .policy import load_checks, policy_digest
 from .redaction import sanitize
@@ -34,6 +35,9 @@ def environment_digest() -> str:
 
 
 class EvidenceService:
+    def build_context(self, task: str, budget_bytes: int = 12_000) -> dict:
+        return build_context(self.root, task, budget_bytes)
+
     def __init__(self, root: Path, allow_execution: bool = False):
         self.root = root.resolve()
         if not self.root.is_dir():
