@@ -57,7 +57,7 @@ Output is JSON. `run_id` comes from the returned receipt. Do not copy the placeh
 code-evidence --project . context "get_run_summary freshness" --budget-bytes 12000
 ```
 
-Selection uses Python AST and lexical keyword matching, not embeddings or semantic understanding. Include symbol names or paths when describing a task in another language. Call-name links are heuristic and may be ambiguous. Every request rereads included source; no stale persistent index is reused. Overlapping ranges are avoided, oversized symbols can be omitted, and the report exposes coverage and omitted matches.
+Selection uses Python AST and lexical keyword matching, not embeddings or semantic understanding. Include symbol names or paths when describing a task in another language. Call-name links are heuristic and may be ambiguous. Every request rereads included source; no stale persistent index is reused. Overlapping ranges are avoided, the highest-ranked oversized symbol can return an explicitly marked partial range; other oversized symbols can be omitted, and the report exposes coverage and omitted matches.
 
 The budget covers the compact ASCII-escaped JSON object, including metadata, rather than an estimated token count. MCP transport wrappers and client rendering can add overhead. Maximum budget is 60,000 bytes; indexing is limited to 300 Python files, 1 MB per parsed file, and 2500 symbols within the source inventory limits. Known secrets are redacted from fragments, but unrecognized private content may remain.
 
